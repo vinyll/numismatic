@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pay</title>
+  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <script>
+    
+    function generateCode() {
+      const qrcode = new QRCode('qrcode')
+      const amount = Number(document.querySelector('[name=amount]').value)
+      const response = fetch(`/transaction`, {
+        method: 'POST',
+        body: `{"amount": ${amount}}`,
+        headers: {
+          'Auth': 2
+        }
+      })
+      .then(r => r.json())
+      .then((body) => {
+        qrcode.makeCode(body.url)
+      })
+      return false
+    }
+  </script>
+</head>
+
+<body>
+  <form onsubmit="return generateCode()">
+    <label>Amount</label>
+    <input type=number name=amount min=1 max=999 placeholder="Type an amount to withdraw">
+
+    <label>Reason</label>
+    <input type="text" name=reason placeholder="Pizza shop">
+
+    <button>Pay</button>
+  </form>
+
+  <div id=qrcode></div>
+
+</body>
+</html>

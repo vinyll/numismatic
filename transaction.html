@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="transaction-id" value="{id}">
+  <title>Processing transation</title>
+  <script>
+    function confirm() {
+      const response = fetch(`/transaction/${document.querySelector('meta[name="transaction-id"]').getAttribute('value')}`, {
+        method: 'PATCH',
+        headers: { 'Auth': 1 }
+      })
+      .then((r) => {
+        if(r.ok) {
+          alert(`Transaction is complete!`)
+        }
+        else {
+          alert(`Some error occured, transaction is voided`)
+        }
+      })
+      return false
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Processing transaction</h1>
+  <p>You are about to receive {amount} units from {user}.</p>
+
+  <button onclick="confirm()">Confirm</button>
+</body>
+</html>
